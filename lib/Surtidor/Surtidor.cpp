@@ -1,7 +1,7 @@
 #include "Surtidor.h"
 
 bool surtir(uint8_t slot, uint8_t porcentaje){
-    if(porcentaje > 100 || slot > 8){
+    if(porcentaje > 100 || slot > 7){
         return false;
     }
 
