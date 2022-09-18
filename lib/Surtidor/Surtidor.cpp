@@ -2,12 +2,18 @@
 
 bool surtir(uint8_t slot, uint8_t porcentaje){
     if(porcentaje > 100 || slot > 7){
-        return false;
+        return true;
     }
 
     int mililitrosALlenar = porcentaje * MILILITROS_DEL_VASO / 100;
 
-    rotarMotor(slot, mililitrosALlenar * PASOS_POR_MILILITRO);
+    Serial.print("Encolando motor ");
+    Serial.print(slot);
+    Serial.print("para surtir ");
+    Serial.print(mililitrosALlenar);
+    Serial.println("ml");
 
-    return true;
+    prepararMotor(slot, mililitrosALlenar * PASOS_POR_MILILITRO);
+    
+    return false;
 }

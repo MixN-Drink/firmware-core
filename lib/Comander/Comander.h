@@ -1,5 +1,13 @@
 #include <stdint.h>
 
+// Comandos
+#define COMMAND_PUMP                0
+#define COMMAND_STOP_PUMP           1
+#define COMMAND_CALIBRATION_START   2
+#define COMMAND_CALIBRATION_STOP    3
+
+// ------------------
+
 #define TYPE_MASK        0b10000000
 #define TYPE_SHIFT       7
 #define COMMAND_MASK     0b00001111
