@@ -17,6 +17,10 @@ void prepararMotor(uint8_t numeroDeMotor, uint32_t pasos){
 }
 
 void procesarMotores(void){
+    if(pasosRestantes == 0){
+        return;
+    }
+    
     Serial.print("Motor: ");
     Serial.print(motorARotar);
     Serial.print(" Pasos restantes: ");

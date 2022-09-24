@@ -8,7 +8,7 @@ void checkIncomingCommand(void);
 void setup() {
     Serial.begin(9600);
     Serial1.begin(9600);
-    motoresInit();  
+    motoresInit();
 }
 
 void loop() {
@@ -20,8 +20,8 @@ void checkIncomingCommand(void){
     static uint8_t statusByte, dataByte;
     static bool receiving = false, complete = false;
 
-    while(Serial1.available()){
-        uint8_t incomingByte = Serial1.read();
+    while(Serial.available()){
+        uint8_t incomingByte = Serial.read();
         Serial.print("Recibi el byte: ");
         Serial.println(incomingByte, BIN);
 
