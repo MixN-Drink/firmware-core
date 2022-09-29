@@ -9,6 +9,7 @@ void setup() {
     Serial.begin(9600);
     Serial1.begin(9600);
     motoresInit();
+    pinMode(LED_BUILTIN, OUTPUT);
 }
 
 void loop() {
@@ -51,11 +52,16 @@ void checkIncomingCommand(void){
         Serial.print(" Data: ");
         Serial.println(data, BIN);
 
-        if(command == COMMAND_PUMP){
-            bool err = surtir(subcommand, data);
-            if(err){
-                Serial.println("Error al procesar procesar el comando surtir");
-            }
+        switch(command){
+            case COMMAND_PUMP:
+                bool err = surtir(subcommand, data);
+                if(err){
+                    Serial.println("Error al procesar procesar el comando surtir");
+                }
+            break;
+            case COMMAND_LED:
+                digitalWrite(LED_BUILTIN, data);
+            break;
         }
     }
 }
