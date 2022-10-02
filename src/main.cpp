@@ -53,15 +53,17 @@ void checkIncomingCommand(void){
         Serial.println(data, BIN);
 
         switch(command){
-            case COMMAND_PUMP:
-                bool err = surtir(subcommand, data);
-                if(err){
-                    Serial.println("Error al procesar procesar el comando surtir");
+            case COMMAND_PUMP:{
+                    bool err = surtir(subcommand, data);
+                    if(err){
+                        Serial.println("Error al procesar procesar el comando surtir");
+                    }
                 }
-            break;
-            case COMMAND_LED:
-                digitalWrite(LED_BUILTIN, data);
-            break;
+                break;
+            case COMMAND_LED:{
+                    digitalWrite(LED_BUILTIN, data);
+                }
+                break;
         }
     }
 }
