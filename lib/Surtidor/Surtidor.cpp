@@ -13,7 +13,7 @@ bool surtir(uint8_t slot, uint8_t porcentaje){
     Serial.print(mililitrosALlenar);
     Serial.println("ml");
 
-    prepararMotor(slot, mililitrosALlenar * PASOS_POR_MILILITRO);
+    prepararMotor(slot, mililitrosALlenar * TIEMPO_POR_MILILITRO);
     
     return false;
 }
