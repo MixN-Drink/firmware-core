@@ -68,6 +68,13 @@ void checkIncomingCommand(void){
                     detenerMotor();
                 }
                 break;
+            case COMMAND_CALIBRATION:{
+                if(subcommand==0){
+                    iniciarCalibracion();
+                }
+                
+            }
+            break;
         }
     }
 }

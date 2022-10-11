@@ -3,10 +3,8 @@
 // Comandos
 #define COMMAND_PUMP                0
 #define COMMAND_STOP_PUMP           1
-#define COMMAND_CALIBRATION_START   2
-#define COMMAND_CALIBRATION_STOP    3
-#define COMMAND_LED 15
-
+#define COMMAND_CALIBRATION         2
+#define COMMAND_LED                 15
 // ------------------
 
 #define TYPE_MASK        0b10000000
