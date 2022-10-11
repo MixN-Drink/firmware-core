@@ -71,10 +71,14 @@ void checkIncomingCommand(void){
             case COMMAND_CALIBRATION:{
                 if(subcommand==0){
                     iniciarCalibracion();
+                }    
+                else{
+                    detenerCalibracion();
+                    
                 }
-                
             }
             break;
+
         }
     }
 }
