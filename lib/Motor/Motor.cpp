@@ -29,8 +29,11 @@ void procesarMotores(void){
         Serial.print(millis() - tiempoFinal);
         Serial.print(")");
         return;    
-    }
-    
+    }    
+}
+
+void detenerMotor(void){
+    tiempoFinal = 0;
 }
 
 

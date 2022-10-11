@@ -63,6 +63,10 @@ void checkIncomingCommand(void){
             case COMMAND_LED:{
                     digitalWrite(LED_BUILTIN, data);
                 }
+                break;           
+            case COMMAND_STOP_PUMP:{
+                    detenerMotor();
+                }
                 break;
         }
     }
