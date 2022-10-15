@@ -3,11 +3,14 @@
 #include "Surtidor.h"
 #include "Comander.h"
 
+#define USB Serial
+#define ESP12 Serial3
+
 void checkIncomingCommand(void);
 
 void setup() {
-    Serial.begin(9600);
-    Serial1.begin(9600);
+    USB.begin(9600);
+    ESP12.begin(9600);
     motoresInit();
     pinMode(LED_BUILTIN, OUTPUT);
 }
@@ -21,10 +24,10 @@ void checkIncomingCommand(void){
     static uint8_t statusByte, dataByte;
     static bool receiving = false, complete = false;
 
-    while(Serial.available()){
-        uint8_t incomingByte = Serial.read();
-        Serial.print("Recibi el byte: ");
-        Serial.println(incomingByte, BIN);
+    while(ESP12.available()){
+        uint8_t incomingByte = ESP12.read();
+        USB.print("Recibi el byte: ");
+        USB.println(incomingByte, BIN);
 
         if(isStatus(incomingByte)){ // Inicio del comando
             receiving = true;
@@ -45,18 +48,18 @@ void checkIncomingCommand(void){
         uint8_t data = getData(dataByte);
 
         // Proceso el comando
-        Serial.print("Comando: ");
-        Serial.print(command, BIN);
-        Serial.print(" Subcomando: ");
-        Serial.print(subcommand, BIN);
-        Serial.print(" Data: ");
-        Serial.println(data, BIN);
+        USB.print("Comando: ");
+        USB.print(command, BIN);
+        USB.print(" Subcomando: ");
+        USB.print(subcommand, BIN);
+        USB.print(" Data: ");
+        USB.println(data, BIN);
 
         switch(command){
             case COMMAND_PUMP:{
                     bool err = surtir(subcommand, data);
                     if(err){
-                        Serial.println("Error al procesar procesar el comando surtir");
+                        USB.println("Error al procesar procesar el comando surtir");
                     }
                 }
                 break;
@@ -74,11 +77,9 @@ void checkIncomingCommand(void){
                 }    
                 else{
                     detenerCalibracion();
-                    
                 }
             }
             break;
-
         }
     }
 }

@@ -13,18 +13,10 @@ bool surtir(uint8_t slot, uint8_t porcentaje){
 
     int mililitrosALlenar = porcentaje * mililitrosDelVaso / 100;
 
-    Serial.print("Encolando motor ");
-    Serial.print(slot);
-    Serial.print("para surtir ");
-    Serial.print(mililitrosALlenar);
-    Serial.println("ml");
-
     prepararMotor(slot, mililitrosALlenar * TIEMPO_POR_MILILITRO);
     
     return false;
 }
-
-
 void iniciarCalibracion(){
     if(calibrando)return;
     prepararMotor(SLOT_CALIBRACION, MILILITROS_DE_CALIBRACION * TIEMPO_POR_MILILITRO);

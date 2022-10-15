@@ -7,13 +7,11 @@ uint64_t tiempoFinal = 0;
 void motoresInit(void){
     pinMode(MOTOR_0_PIN, OUTPUT);
 }
-
 void prepararMotor(uint8_t numeroDeMotor, uint32_t tiempo){
     motorARotar = numeroDeMotor;
     tiempoFinal = millis() + tiempo;
     digitalWrite(motorPin[motorARotar], 1);
 }
-
 void procesarMotores(void){
     if(tiempoFinal==0){
         return;
@@ -24,7 +22,6 @@ void procesarMotores(void){
         return;    
     }    
 }
-
 void detenerMotor(void){
     tiempoFinal = 0;
 }
