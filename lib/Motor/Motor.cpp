@@ -20,13 +20,13 @@ void procesarMotores(void){
         return;
     }
     if(millis()> tiempoFinal){
-        digitalWrite(motorPin[motorARotar], 0);
-        tiempoFinal = 0;
+        detenerMotor();
         return;    
     }    
 }
 void detenerMotor(void){
     tiempoFinal = 0;
+    digitalWrite(motorPin[motorARotar], 0);
 }
 
 
