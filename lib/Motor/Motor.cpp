@@ -1,8 +1,8 @@
 #include "Motor.h"
 
-uint8_t motorPin[8] = {MOTOR_0_PIN,MOTOR_1_PIN,MOTOR_2_PIN,MOTOR_3_PIN,0,0,0,0};
+uint8_t motorPin[8] = {MOTOR_0_PIN,MOTOR_1_PIN,MOTOR_2_PIN,MOTOR_3_PIN,255,255,255,255};
 uint8_t motorARotar = 0;
-uint64_t tiempoFinal = 0;
+uint32_t tiempoFinal = 0;
 
 void motoresInit(void){
     pinMode(MOTOR_0_PIN, OUTPUT);
@@ -19,14 +19,14 @@ void procesarMotores(void){
     if(tiempoFinal==0){
         return;
     }
-    if(millis()> tiempoFinal){
+    if(millis() > tiempoFinal){
         detenerMotor();
         return;    
     }    
 }
 void detenerMotor(void){
-    tiempoFinal = 0;
     digitalWrite(motorPin[motorARotar], 0);
+    tiempoFinal = 0;
 }
 
 

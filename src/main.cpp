@@ -9,7 +9,7 @@
 void checkIncomingCommand(void);
 
 void setup() {
-    USB.begin(9600);
+    USB.begin(115200);
     ESP12.begin(9600);
     motoresInit();
     pinMode(LED_BUILTIN, OUTPUT);
