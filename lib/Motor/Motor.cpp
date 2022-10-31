@@ -14,45 +14,42 @@ void motoresInit(void){
 }
 void prepararMotor(uint8_t numeroDeMotor, uint16_t tiempo){
     if(tiempoFinal != 0){
-        Serial.println("Ya hay una bomba funcionado");
+        Serial.println("Ya hay una bomba funcionado. Poniendo en cola...");
         
-        // Esta es la forma buscando el primer hueco vacio
-        Serial.println("Buscando proximo hueco libre...");
+        // Busca en la cola el primer hueco libre
         for(uint8_t lugar = 0; lugar<COLA_LONGITUD; lugar++){
             if(colaMotores[lugar] == HUECO_LIBRE) {
-                Serial.print("El hueco ");
-                Serial.print(lugar);
-                Serial.println(" esta libre");
                 colaMotores[lugar] = numeroDeMotor;
                 colaDeTiempos[lugar] = tiempo;
-
                 break;
             }
         }
-        
+        Serial.print("Cola: ");
         imprimirCola();
 
         return;
     }
-
-    detenerMotor();
+    
     motorARotar = numeroDeMotor;
     tiempoFinal = millis() + (uint32_t)tiempo;
+
+    Serial.print("Procesando motor: ");
+    Serial.println(motorARotar);
     digitalWrite(motorPin[motorARotar], 1);
 }
 void procesarMotores(void){
     if(tiempoFinal==0){
         if(colaMotores[0] != HUECO_LIBRE){
-            Serial.println("Hay un elemento en la cola.");
             motorARotar = colaMotores[0];
             tiempoFinal = millis() + colaDeTiempos[0];
-
-            Serial.println("Cola antes de eliminar");
-            imprimirCola();
+            
             sacarPrimerElementoDeLasColas();
-            Serial.println("Cola despues de eliminar");
+
+            Serial.print("Siguientes: ");
             imprimirCola();
 
+            Serial.print("Procesando motor: ");
+            Serial.println(motorARotar);
             digitalWrite(motorPin[motorARotar], 1);            
         }
         return;      
@@ -63,6 +60,8 @@ void procesarMotores(void){
     }    
 }
 void detenerMotor(void){
+    Serial.print("Deteniento motor: ");
+    Serial.println(motorARotar);
     digitalWrite(motorPin[motorARotar], 0);
     tiempoFinal = 0;
 }
@@ -77,7 +76,6 @@ void sacarPrimerElementoDeLasColas(){
 }
 
 void imprimirCola(){
-    Serial.println("Cola de motores: ");
     for(uint8_t lugar = 0; lugar<COLA_LONGITUD; lugar++){
         if(colaMotores[lugar] == HUECO_LIBRE) break;
 
