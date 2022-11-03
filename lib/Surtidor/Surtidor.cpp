@@ -1,17 +1,17 @@
 #include "Surtidor.h"
 
 bool calibrando = false;
-uint64_t tiempoInicioCalibracion;
+uint32_t tiempoInicioCalibracion;
 uint16_t mililitrosDelVaso = MILILITROS_DEL_VASO_DEFAULT;
 
 bool surtir(uint8_t slot, uint8_t porcentaje){
-    if(calibrando)return;
+    if(calibrando) return true;
     
     if(porcentaje > 100 || slot > 7){
         return true;
     }
 
-    int mililitrosALlenar = porcentaje * mililitrosDelVaso / 100;
+    uint16_t mililitrosALlenar = (uint32_t)porcentaje * (uint32_t)mililitrosDelVaso / 100;
 
     prepararMotor(slot, mililitrosALlenar * TIEMPO_POR_MILILITRO);
     
@@ -19,14 +19,14 @@ bool surtir(uint8_t slot, uint8_t porcentaje){
 }
 void iniciarCalibracion(){
     if(calibrando)return;
-    prepararMotor(SLOT_CALIBRACION, MILILITROS_DE_CALIBRACION * TIEMPO_POR_MILILITRO);
-    calibrando = true;
+    prepararMotor(SLOT_CALIBRACION, TIEMPO_MAX_DE_CALIBRACION);
     tiempoInicioCalibracion = millis();
+    calibrando = true;
 }
 void detenerCalibracion(){
     if(!calibrando)return;
+    uint32_t tiempoCalibrando = millis() - tiempoInicioCalibracion;
     detenerMotor();
     calibrando = false;
-    uint64_t tiempoCalibrando = millis() - tiempoInicioCalibracion;
-    mililitrosDelVaso = TIEMPO_POR_MILILITRO * tiempoCalibrando;
+    mililitrosDelVaso = tiempoCalibrando / TIEMPO_POR_MILILITRO;
 }

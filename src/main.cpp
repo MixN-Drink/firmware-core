@@ -9,10 +9,11 @@
 void checkIncomingCommand(void);
 
 void setup() {
-    USB.begin(9600);
-    ESP12.begin(9600);
+    USB.begin(115200);
+    ESP12.begin(115200);
     motoresInit();
     pinMode(LED_BUILTIN, OUTPUT);
+    USB.println("Sistema iniciado");
 }
 
 void loop() {
@@ -21,65 +22,66 @@ void loop() {
 }
 
 void checkIncomingCommand(void){
-    static uint8_t statusByte, dataByte;
-    static bool receiving = false, complete = false;
+    static uint8_t incoming[2] = {0,0};
+    static uint8_t pos = 0;
 
     while(ESP12.available()){
         uint8_t incomingByte = ESP12.read();
-        USB.print("Recibi el byte: ");
-        USB.println(incomingByte, BIN);
+        USB.print("Recibi el byte: 0x");
+        USB.println(incomingByte, HEX);
 
-        if(isStatus(incomingByte)){ // Inicio del comando
-            receiving = true;
-            complete = false;
-            statusByte = incomingByte;
-        } else if(isData(incomingByte) && receiving){
-            receiving = false;
-            complete = true;
-            dataByte = incomingByte;
+        // Si pos es menor a 2 el mensaje esta incompleto
+        if(pos<2){
+            incoming[pos] = incomingByte;
+            pos++;
         }
-    }
 
-    if(complete){
-        complete = false;
+        // Cuando pos sea 2, se completó el mensaje
+        if(pos == 2){
+            pos = 0;
 
-        uint8_t command = getCommand(statusByte);
-        uint8_t subcommand = getSubCommand(statusByte); 
-        uint8_t data = getData(dataByte);
+            if(!isStatus(incoming[0]) || !isData(incoming[1])){
+                return;
+            }
 
-        // Proceso el comando
-        USB.print("Comando: ");
-        USB.print(command, BIN);
-        USB.print(" Subcomando: ");
-        USB.print(subcommand, BIN);
-        USB.print(" Data: ");
-        USB.println(data, BIN);
+            uint8_t command = getCommand(incoming[0]);
+            uint8_t subcommand = getSubCommand(incoming[0]); 
+            uint8_t data = getData(incoming[1]);
 
-        switch(command){
-            case COMMAND_PUMP:{
-                    bool err = surtir(subcommand, data);
-                    if(err){
-                        USB.println("Error al procesar procesar el comando surtir");
+            // Proceso el comando
+            USB.print("Comando: ");
+            USB.print(command, DEC);
+            USB.print(" Subcomando: ");
+            USB.print(subcommand, DEC);
+            USB.print(" Data: ");
+            USB.println(data, DEC);
+
+            switch(command){
+                case COMMAND_PUMP:{
+                        bool err = surtir(subcommand, data);
+                        if(err){
+                            USB.println("Error al procesar procesar el comando surtir");
+                        }
+                    }
+                    break;
+                case COMMAND_LED:{
+                        digitalWrite(LED_BUILTIN, data);
+                    }
+                    break;           
+                case COMMAND_STOP_PUMP:{
+                        detenerMotor();
+                    }
+                    break;
+                case COMMAND_CALIBRATION:{
+                    if(subcommand==0){
+                        iniciarCalibracion();
+                    }    
+                    else{
+                        detenerCalibracion();
                     }
                 }
                 break;
-            case COMMAND_LED:{
-                    digitalWrite(LED_BUILTIN, data);
-                }
-                break;           
-            case COMMAND_STOP_PUMP:{
-                    detenerMotor();
-                }
-                break;
-            case COMMAND_CALIBRATION:{
-                if(subcommand==0){
-                    iniciarCalibracion();
-                }    
-                else{
-                    detenerCalibracion();
-                }
             }
-            break;
         }
     }
 }
